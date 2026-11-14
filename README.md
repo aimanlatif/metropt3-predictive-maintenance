@@ -1,8 +1,8 @@
 # MetroPT-3 Predictive Maintenance: Four-Model Failure Prediction
 
-Predicting compressor failures from industrial sensor data. The notebook compares four classifiers on a **chronologically split** dataset with severe class imbalance, and evaluates them with metrics suited to rare events (PR-AUC, precision, recall, F1).
+Predicting compressor failures using industrial sensor data. In this notebook, four classification models are evaluated on a **chronologically divided** data set that exhibits an extreme level of class imbalance, using performance measures appropriate for imbalanced classes (PR-AUC, precision, recall, F1 score).
 
-> **Status:** part of a manuscript in preparation, *"A Machine Learning Framework for Intelligent Anomaly Detection and Predictive Monitoring of Industrial Systems"*.
+> **Status:** in preparation for publication, *"A Machine Learning Framework for Intelligent Anomaly Detection and Predictive Monitoring of Industrial Systems"*.
 
 ## Overview
 
@@ -17,11 +17,11 @@ Predicting compressor failures from industrial sensor data. The notebook compare
 
 ## Key points of the method
 
-- **No shuffling.** The time series is split at a fixed point so the models are tested on later data than they were trained on.
-- **No test-set leakage in preprocessing.** The median imputer is fitted on the training set only.
-- **Feature-count guard.** The notebook stops if the input does not have exactly 43 predictors, which prevents training on an index column or on the target.
-- **PR-AUC first.** With about 2.9% failures, accuracy is high for any model that predicts "normal" most of the time, so PR-AUC is the main comparison metric.
-- **Threshold robustness check.** An extra section chooses each model's threshold on a validation slice from the end of the training period, then applies it once to the test set.
+- **No shuffling.** The time series is split at a fixed point such that the models are evaluated on newer data than they were trained on.
+- **No test-set leakage in preprocessing.** The median imputer is trained on the training set only.
+- **Feature-count guard.** If the number of features in the input is not 43, the notebook will not proceed with the training of the model on the index column or target.
+- **PR-AUC first.** Given about 2.9% failure rate, any model that is trained to predict "normal" in most cases will be accurate, thus PR-AUC is the primary metric used.
+- **Threshold robustness test.** Additionally, there is a separate part where each model's threshold is selected using the validation slice at the end of the training period, and applied to the test set once.
 
 ## Reported results (from the manuscript)
 
@@ -32,9 +32,9 @@ Predicting compressor failures from industrial sensor data. The notebook compare
 | XGBoost | 0.02 | 0.6546 | 0.2548 | 0.3668 | 0.9687 | 0.4717 |
 | LightGBM | 0.01 | 0.7845 | 0.4330 | 0.5580 | 0.9714 | **0.6042** |
 
-LightGBM had the best PR-AUC, ROC-AUC and precision. Logistic Regression had the best recall and F1 at its threshold.
+LightGBM had the highest PR-AUC, ROC-AUC, and precision. Logistic Regression had the best recall and F1 scores at its threshold.
 
-These values come from the original experiment. Running the notebook trains the models again with the settings documented in the manuscript, and prints the difference from the reported values. A fresh run can differ slightly.
+This is based on the results of the initial experiment. Running the notebook reruns the experiment with parameters as mentioned in the manuscript, and outputs the difference from the reported results. A new run may have slight differences.
 
 ## Repository structure
 
@@ -49,17 +49,17 @@ These values come from the original experiment. Running the notebook trains the 
 
 ## Run it
 
-1. Get the MetroPT-3 dataset (search for "MetroPT-3" in the UCI Machine Learning Repository).
-2. Open `notebooks/metropt3_four_model_comparison.ipynb` in Google Colab.
-3. Upload the final 43-feature CSV (file name containing `final_43_features`) when asked. The raw-data feature-engineering code and the engineered file are not included in this repository.
-4. Run the cells in order.
+1. Download the MetroPT-3 dataset (use “MetroPT-3” in the UCI Machine Learning Repository).
+2. Click on `notebooks/metropt3_four_model_comparison.ipynb` inside Google Colab.
+3. Upload the CSV file with the final 43 features (file name should have `final_43_features`) when prompted. The raw data and feature engineering code are not part of this repo.
+4. Execute the cells sequentially.
 
 ## Limitations
 
-- One chronological split, so the results describe a single period.
-- No hyperparameter search. The model settings were chosen manually as reasonable starting points.
-- The thresholds were chosen to maximise F1 in the original experiment. The validation-slice check in the notebook shows how much this choice matters.
-- Confidence intervals and a lead-time analysis are not included yet.
+- Chronological split done, thus results refer to a single period of time.
+- No hyperparameter tuning was done. Model parameters were selected manually.
+- Thresholds were selected so that F1 would be maximum in the initial experiment. Validation-slice check is demonstrated in the notebook for showing how important it was.
+- Lead-time analysis and confidence intervals are not implemented yet.
 
 ## Citation
 
